@@ -10,12 +10,12 @@ public class Customer : Entity
     public string Cpf { get; private set; }
     public string Phone { get; private set; }
     public string Email { get; private set; }
-    public int? AddressId { get; private set; }
+    public int AddressId { get; private set; }
 
     public Address Address { get; private set; }
     public ICollection<CustomerVehicle> CustomerVehicles { get; private set; } = new List<CustomerVehicle>();
 
-    public Customer(int id, string name, DateOnly? birthDate, string cpf, string phone, string email, int? addressId)
+    public Customer(int id, string name, DateOnly? birthDate, string cpf, string phone, string email, int addressId)
     {
         ValidateDomain(name, birthDate, cpf, phone, email, addressId);
 
@@ -28,7 +28,7 @@ public class Customer : Entity
         AddressId = addressId;
     }
 
-    private void ValidateDomain(string name, DateOnly? birthDate, string cpf, string phone, string email, int? addressId)
+    private void ValidateDomain(string name, DateOnly? birthDate, string cpf, string phone, string email, int addressId)
     {
         DomainExceptionValidation.GetErrors(string.IsNullOrWhiteSpace(name), "Name is required");
         DomainExceptionValidation.GetErrors(name.Length > 100, "Name cannot exceed 100 characters");
@@ -46,7 +46,7 @@ public class Customer : Entity
                 System.Globalization.DateTimeStyles.None, out _), "BirthDate must be in the format DD/MM/YYYY");
         }
 
-        DomainExceptionValidation.GetErrors(addressId <= 0 && addressId.HasValue, "AddressId must be greater than zero when provided");
+        DomainExceptionValidation.GetErrors(addressId <= 0, "AddressId is required and must be greater than zero");
     }
 
 }
