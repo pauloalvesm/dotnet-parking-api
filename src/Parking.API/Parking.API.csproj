@@ -19,4 +19,8 @@
     <Folder Include="Controllers\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Parking.IoC\Parking.IoC.csproj" />
+  </ItemGroup>
+
 </Project>
