@@ -2,6 +2,8 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Parking.Data.Context;
+using Parking.Data.Implementations;
+using Parking.Domain.Interfaces.Repositories;
 
 namespace Parking.IoC.Configurations;
 
@@ -12,6 +14,13 @@ public static class DependencyInjection
         var connectionString = configuration.GetConnectionString("DefaultConnection");
 
         services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(connectionString));
+
+        services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+        services.AddScoped<IAddressRepository, AddressRepository>();
+        services.AddScoped<ICustomerRepository, CustomerRepository>();
+        services.AddScoped<IVehicleRepository, VehicleRepository>();
+        services.AddScoped<ICustomerVehicleRepository, CustomerVehicleRepository>();
+        services.AddScoped<IStayRepository, StayRepository>();
 
         return services;
     }
