@@ -9,4 +9,5 @@ public interface IStayService
     Task<StayDTO> CreateStay(StayDTO stayDto);
     Task<StayDTO> CompleteStay(int id, DateTime exitDate);
     Task<StayDTO> CancelStay(int id);
+    Task DeleteStay(int id);
 }
