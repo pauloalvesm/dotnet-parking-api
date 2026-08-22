@@ -13,5 +13,7 @@
   <Folder Name="/src/04 - Domain/">
     <Project Path="src/Parking.Domain/Parking.Domain.csproj" />
   </Folder>
-  <Folder Name="/tests/" />
+  <Folder Name="/tests/">
+    <Project Path="tests/Parking.Domain.Test/Parking.Domain.Test.csproj" Id="62b68ffb-b50d-46a6-a2e4-ea04bc4f3b40" />
+  </Folder>
 </Solution>
