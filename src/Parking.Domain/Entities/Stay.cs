@@ -19,13 +19,13 @@ public class Stay : Entity
     public Stay() { }
 
     public Stay(int id,
-                int? customerVehicleId, 
-                string licensePlate, 
-                DateTime? entryDate, 
-                DateTime? exitDate, 
-                decimal hourlyRate, 
-                decimal? totalAmount, 
-                StayStatus stayStatus, 
+                int? customerVehicleId,
+                string licensePlate,
+                DateTime? entryDate,
+                DateTime? exitDate,
+                decimal hourlyRate,
+                decimal? totalAmount,
+                StayStatus stayStatus,
                 CustomerVehicle customerVehicle)
     {
         ValidateDomain(customerVehicleId, licensePlate, entryDate, hourlyRate);
@@ -65,20 +65,36 @@ public class Stay : Entity
 
     public void CompleteStay(DateTime? exitDate = null)
     {
-        ExitDate = exitDate ?? DateTime.Now;
+        DomainExceptionValidation.GetErrors(StayStatus != StayStatus.Parked, "Only parked stays can be completed");
+
+        ExitDate = exitDate ?? DateTime.UtcNow;
+
+        DomainExceptionValidation.GetErrors(EntryDate.HasValue && ExitDate < EntryDate, "ExitDate cannot be earlier than EntryDate");
+
         double hours = CalculateStayHours();
         TotalAmount = CalculateTotalAmount(hours);
         UpdateStatus(StayStatus.Completed);
     }
 
-    public void CancelStay()
+    public void CancelStay(DateTime? currentDate = null)
     {
+        DomainExceptionValidation.GetErrors(StayStatus != StayStatus.Parked, "Only parked stays can be cancelled");
+
+        if (EntryDate.HasValue)
+        {
+            DateTime cancelTime = currentDate ?? DateTime.UtcNow;
+            TimeSpan timeElapsed = cancelTime - EntryDate.Value;
+
+            DomainExceptionValidation.GetErrors(timeElapsed.TotalMinutes > 5, "Stay can only be cancelled within 5 minutes of entry");
+            DomainExceptionValidation.GetErrors(cancelTime < EntryDate.Value, "Cancellation date cannot be earlier than EntryDate");
+        }
+
         UpdateStatus(StayStatus.Cancelled);
     }
 
     private void ValidateDomain(int? customerVehicleId, string licensePlate, DateTime? entryDate, decimal hourlyRate)
     {
-        DomainExceptionValidation.GetErrors(customerVehicleId <= 0, "CustomerVehicleId must be greater than zero");
+        DomainExceptionValidation.GetErrors(!customerVehicleId.HasValue || customerVehicleId <= 0, "CustomerVehicleId is required and must be greater than zero");
         DomainExceptionValidation.GetErrors(string.IsNullOrWhiteSpace(licensePlate), "LicensePlate is required");
         DomainExceptionValidation.GetErrors(licensePlate.Length > 10, "LicensePlate cannot exceed 10 characters");
         DomainExceptionValidation.GetErrors(entryDate.HasValue && entryDate > DateTime.UtcNow, "EntryDate cannot be in the future");
