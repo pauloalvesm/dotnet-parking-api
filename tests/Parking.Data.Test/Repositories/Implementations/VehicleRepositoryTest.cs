@@ -9,7 +9,7 @@ using Parking.Domain.Enums;
 
 namespace Parking.Data.Test.Repositories.Implementations;
 
-public class RepositoryTest
+public class VehicleRepositoryTest
 {
     private readonly Mock<ILogger<Vehicle>> _loggerMock = new();
 
@@ -22,8 +22,8 @@ public class RepositoryTest
         return new ApplicationDbContext(options);
     }
 
-    [Fact(DisplayName = "GetAllAsync - Positive: Should Return All Entities")]
-    public async Task Repository_GetAllAsync_ShouldReturnAllEntities()
+    [Fact(DisplayName = "GetAllAsync - Positive: Should Return All Vehicles")]
+    public async Task Repository_GetAllAsync_ShouldReturnAllVehicles()
     {
         // Arrange
         using var context = GetInMemoryDbContext();
@@ -40,8 +40,8 @@ public class RepositoryTest
         Assert.Equal(3, result.Count());
     }
 
-    [Fact(DisplayName = "GetAllAsync - Positive: Should Return Empty List When No Entities Exist")]
-    public async Task Repository_GetAllAsync_ShouldReturnEmptyListWhenNoEntitiesExist()
+    [Fact(DisplayName = "GetAllAsync - Positive: Should Return Empty List When No Vehicles Exist")]
+    public async Task Repository_GetAllAsync_ShouldReturnEmptyListWhenNoVehiclesExist()
     {
         // Arrange
         using var context = GetInMemoryDbContext();
@@ -138,7 +138,7 @@ public class RepositoryTest
         await Assert.ThrowsAsync<InvalidOperationException>(() => repository.AddAsync(newVehicle));
     }
 
-    [Fact(DisplayName = "UpdateAsync - Positive: Should Return Updated Entity")]
+    [Fact(DisplayName = "UpdateAsync - Positive: Should Return Updated Vehicle")]
     public async Task Repository_UpdateAsync_ShouldReturnUpdatedEntity()
     {
         // Arrange
@@ -172,7 +172,7 @@ public class RepositoryTest
         await Assert.ThrowsAsync<InvalidOperationException>(() => repository.UpdateAsync(updatedVehicle));
     }
 
-    [Fact(DisplayName = "DeleteAsync - Positive: Should Complete Successfully When Entity Exists")]
+    [Fact(DisplayName = "DeleteAsync - Positive: Should Complete Successfully When Vehicle Exists")]
     public async Task Repository_DeleteAsync_ShouldCompleteSuccessfully()
     {
         // Arrange
@@ -190,8 +190,8 @@ public class RepositoryTest
         Assert.Equal(0, context.Vehicles.Count());
     }
 
-    [Fact(DisplayName = "DeleteAsync - Positive: Should Handle Non Existing Entity Gracefully")]
-    public async Task Repository_DeleteAsync_ShouldHandleNonExistingEntityGracefully()
+    [Fact(DisplayName = "DeleteAsync - Positive: Should Handle Non Existing Vehicle Gracefully")]
+    public async Task Repository_DeleteAsync_ShouldHandleNonExistingVehicleGracefully()
     {
         // Arrange
         using var context = GetInMemoryDbContext();
