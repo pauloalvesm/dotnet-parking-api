@@ -14,6 +14,7 @@
     <Project Path="src/Parking.Domain/Parking.Domain.csproj" />
   </Folder>
   <Folder Name="/tests/">
+    <Project Path="tests/Parking.Data.Test/Parking.Data.Test.csproj" Id="50d7407a-ce55-4c7c-b444-beac96038480" />
     <Project Path="tests/Parking.Domain.Test/Parking.Domain.Test.csproj" Id="62b68ffb-b50d-46a6-a2e4-ea04bc4f3b40" />
   </Folder>
 </Solution>
