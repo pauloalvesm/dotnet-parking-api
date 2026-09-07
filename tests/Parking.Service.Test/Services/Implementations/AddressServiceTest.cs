@@ -5,7 +5,6 @@ using Parking.Domain.Interfaces.Repositories;
 using Parking.Service.DTOs;
 using Parking.Service.Implementations;
 using Parking.Service.Test.Helpers;
-using Xunit;
 
 namespace Parking.Service.Test.Services.Implementations;
 
