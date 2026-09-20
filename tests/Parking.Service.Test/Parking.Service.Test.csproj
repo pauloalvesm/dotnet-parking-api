@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Parking.Service\Parking.Service.csproj" />
+    <ProjectReference Include="..\Parking.Test.Shared\Parking.Test.Shared.csproj" />
   </ItemGroup>
 
   <ItemGroup>

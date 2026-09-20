@@ -1,8 +1,9 @@
-﻿using Parking.Domain.Entities;
+﻿using System.Reflection;
+using Parking.Domain.Entities;
 using Parking.Domain.Enums;
 using Parking.Service.DTOs;
 
-namespace Parking.Service.Test.Helpers;
+namespace Parking.Test.Shared.Helpers;
 
 public static class VehicleTestHelper
 {
@@ -25,19 +26,19 @@ public static class VehicleTestHelper
         var vehicle = (Vehicle)System.Runtime.CompilerServices.RuntimeHelpers.GetUninitializedObject(typeof(Vehicle));
 
         SetPropertyIfExists(vehicle, nameof(Vehicle.Id), id);
-        SetPropertyIfExists(vehicle, "VehicleType", (VehicleType)1);
-        SetPropertyIfExists(vehicle, "Brand", "Toyota");
-        SetPropertyIfExists(vehicle, "Model", "Corolla");
-        SetPropertyIfExists(vehicle, "Color", "Black");
-        SetPropertyIfExists(vehicle, "VehicleYear", 2022);
-        SetPropertyIfExists(vehicle, "Notes", "Test vehicle notes");
+        SetPropertyIfExists(vehicle, nameof(Vehicle.VehicleType), (VehicleType)1);
+        SetPropertyIfExists(vehicle, nameof(Vehicle.Brand), "Toyota");
+        SetPropertyIfExists(vehicle, nameof(Vehicle.Model), "Corolla");
+        SetPropertyIfExists(vehicle, nameof(Vehicle.Color), "Black");
+        SetPropertyIfExists(vehicle, nameof(Vehicle.VehicleYear), 2022);
+        SetPropertyIfExists(vehicle, nameof(Vehicle.Notes), "Test vehicle notes");
 
         return vehicle;
     }
 
     private static void SetPropertyIfExists(object obj, string propertyName, object value)
     {
-        var prop = obj.GetType().GetProperty(propertyName);
+        var prop = obj.GetType().GetProperty(propertyName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
         if (prop != null && prop.CanWrite)
         {
             prop.SetValue(obj, value);

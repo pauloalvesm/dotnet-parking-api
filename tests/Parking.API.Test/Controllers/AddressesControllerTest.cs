@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Moq;
 using Parking.Api.Controllers;
-using Parking.API.Test.Helpers;
 using Parking.Service.DTOs;
 using Parking.Service.Interfaces;
+using Parking.Test.Shared.Helpers;
 
 namespace Parking.API.Test.Controllers;
 

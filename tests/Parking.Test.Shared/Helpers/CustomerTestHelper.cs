@@ -1,7 +1,8 @@
-﻿using Parking.Domain.Entities;
+﻿using System.Reflection;
+using Parking.Domain.Entities;
 using Parking.Service.DTOs;
 
-namespace Parking.Service.Test.Helpers;
+namespace Parking.Test.Shared.Helpers;
 
 public static class CustomerTestHelper
 {
@@ -25,19 +26,20 @@ public static class CustomerTestHelper
         var customer = (Customer)System.Runtime.CompilerServices.RuntimeHelpers.GetUninitializedObject(typeof(Customer));
 
         SetPropertyIfExists(customer, nameof(Customer.Id), id);
-        SetPropertyIfExists(customer, "Name", "John Doe");
-        SetPropertyIfExists(customer, "BirthDate", new DateOnly(1990, 1, 1));
-        SetPropertyIfExists(customer, "Cpf", "12345678901");
-        SetPropertyIfExists(customer, "Phone", "11999999999");
-        SetPropertyIfExists(customer, "Email", "john.doe@test.com");
-        SetPropertyIfExists(customer, "AddressId", 1);
+        SetPropertyIfExists(customer, nameof(Customer.Name), "John Doe");
+        SetPropertyIfExists(customer, nameof(Customer.BirthDate), new DateOnly(1990, 1, 1));
+        SetPropertyIfExists(customer, nameof(Customer.Cpf), "12345678901");
+        SetPropertyIfExists(customer, nameof(Customer.Phone), "11999999999");
+        SetPropertyIfExists(customer, nameof(Customer.Email), "john.doe@test.com");
+        SetPropertyIfExists(customer, nameof(Customer.AddressId), 1);
+        SetPropertyIfExists(customer, nameof(Customer.Address), AddressTestHelper.CreateValidAddressEntity(1));
 
         return customer;
     }
 
     private static void SetPropertyIfExists(object obj, string propertyName, object value)
     {
-        var prop = obj.GetType().GetProperty(propertyName);
+        var prop = obj.GetType().GetProperty(propertyName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
         if (prop != null && prop.CanWrite)
         {
             prop.SetValue(obj, value);

@@ -1,7 +1,8 @@
-﻿using Parking.Domain.Entities;
+﻿using System.Reflection;
+using Parking.Domain.Entities;
 using Parking.Service.DTOs;
 
-namespace Parking.Service.Test.Helpers;
+namespace Parking.Test.Shared.Helpers;
 
 public static class CustomerVehicleTestHelper
 {
@@ -22,15 +23,17 @@ public static class CustomerVehicleTestHelper
         var customerVehicle = (CustomerVehicle)System.Runtime.CompilerServices.RuntimeHelpers.GetUninitializedObject(typeof(CustomerVehicle));
 
         SetPropertyIfExists(customerVehicle, nameof(CustomerVehicle.Id), id);
-        SetPropertyIfExists(customerVehicle, "CustomerId", 1);
-        SetPropertyIfExists(customerVehicle, "VehicleId", 1);
+        SetPropertyIfExists(customerVehicle, nameof(CustomerVehicle.CustomerId), 1);
+        SetPropertyIfExists(customerVehicle, nameof(CustomerVehicle.VehicleId), 1);
+        SetPropertyIfExists(customerVehicle, nameof(CustomerVehicle.Customer), CustomerTestHelper.CreateValidCustomerEntity(1));
+        SetPropertyIfExists(customerVehicle, nameof(CustomerVehicle.Vehicle), VehicleTestHelper.CreateValidVehicleEntity(1));
 
         return customerVehicle;
     }
 
     private static void SetPropertyIfExists(object obj, string propertyName, object value)
     {
-        var prop = obj.GetType().GetProperty(propertyName);
+        var prop = obj.GetType().GetProperty(propertyName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
         if (prop != null && prop.CanWrite)
         {
             prop.SetValue(obj, value);
