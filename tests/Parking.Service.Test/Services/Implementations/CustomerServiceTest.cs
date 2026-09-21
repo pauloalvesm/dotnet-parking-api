@@ -129,6 +129,7 @@ public class CustomerServiceTest
         var inputDto = CustomerTestHelper.CreateValidCustomerDTO(0);
         var mappedEntity = CustomerTestHelper.CreateValidCustomerEntity(0);
         var createdEntity = CustomerTestHelper.CreateValidCustomerEntity(1);
+        var fullEntity = CustomerTestHelper.CreateValidCustomerEntity(1);
         var resultDto = CustomerTestHelper.CreateValidCustomerDTO(1);
 
         _mapperMock
@@ -136,11 +137,15 @@ public class CustomerServiceTest
             .Returns(mappedEntity);
 
         _customerRepositoryMock
-            .Setup(repo => repo.AddAsync(mappedEntity))
+            .Setup(repo => repo.AddAsync(It.IsAny<Customer>()))
             .ReturnsAsync(createdEntity);
 
+        _customerRepositoryMock
+            .Setup(repo => repo.GetByIdAsync(createdEntity.Id))
+            .ReturnsAsync(fullEntity);
+
         _mapperMock
-            .Setup(mapper => mapper.Map<CustomerDTO>(createdEntity))
+            .Setup(mapper => mapper.Map<CustomerDTO>(fullEntity))
             .Returns(resultDto);
 
         // Act
@@ -150,8 +155,9 @@ public class CustomerServiceTest
         Assert.NotNull(result);
         Assert.Equal(1, result.Id);
         _mapperMock.Verify(mapper => mapper.Map<Customer>(inputDto), Times.Once);
-        _customerRepositoryMock.Verify(repo => repo.AddAsync(mappedEntity), Times.Once);
-        _mapperMock.Verify(mapper => mapper.Map<CustomerDTO>(createdEntity), Times.Once);
+        _customerRepositoryMock.Verify(repo => repo.AddAsync(It.IsAny<Customer>()), Times.Once);
+        _customerRepositoryMock.Verify(repo => repo.GetByIdAsync(createdEntity.Id), Times.Once);
+        _mapperMock.Verify(mapper => mapper.Map<CustomerDTO>(fullEntity), Times.Once);
     }
 
     [Fact]
@@ -166,12 +172,12 @@ public class CustomerServiceTest
             .Returns(mappedEntity);
 
         _customerRepositoryMock
-            .Setup(repo => repo.AddAsync(mappedEntity))
+            .Setup(repo => repo.AddAsync(It.IsAny<Customer>()))
             .ThrowsAsync(new InvalidOperationException("Database error"));
 
         // Act & Assert
         await Assert.ThrowsAsync<InvalidOperationException>(() => _customerService.CreateCustomer(inputDto));
-        _customerRepositoryMock.Verify(repo => repo.AddAsync(mappedEntity), Times.Once);
+        _customerRepositoryMock.Verify(repo => repo.AddAsync(It.IsAny<Customer>()), Times.Once);
     }
 
     [Fact]
@@ -188,7 +194,7 @@ public class CustomerServiceTest
             .Returns(mappedEntity);
 
         _customerRepositoryMock
-            .Setup(repo => repo.UpdateAsync(mappedEntity))
+            .Setup(repo => repo.UpdateAsync(It.IsAny<Customer>()))
             .ReturnsAsync(updatedEntity);
 
         _mapperMock
@@ -202,7 +208,7 @@ public class CustomerServiceTest
         Assert.NotNull(result);
         Assert.Equal(inputDto.Id, result.Id);
         _mapperMock.Verify(mapper => mapper.Map<Customer>(inputDto), Times.Once);
-        _customerRepositoryMock.Verify(repo => repo.UpdateAsync(mappedEntity), Times.Once);
+        _customerRepositoryMock.Verify(repo => repo.UpdateAsync(It.IsAny<Customer>()), Times.Once);
         _mapperMock.Verify(mapper => mapper.Map<CustomerDTO>(updatedEntity), Times.Once);
     }
 
@@ -218,12 +224,12 @@ public class CustomerServiceTest
             .Returns(mappedEntity);
 
         _customerRepositoryMock
-            .Setup(repo => repo.UpdateAsync(mappedEntity))
+            .Setup(repo => repo.UpdateAsync(It.IsAny<Customer>()))
             .ThrowsAsync(new InvalidOperationException("Database error"));
 
         // Act & Assert
         await Assert.ThrowsAsync<InvalidOperationException>(() => _customerService.UpdateCustomer(inputDto));
-        _customerRepositoryMock.Verify(repo => repo.UpdateAsync(mappedEntity), Times.Once);
+        _customerRepositoryMock.Verify(repo => repo.UpdateAsync(It.IsAny<Customer>()), Times.Once);
     }
 
     [Fact]
