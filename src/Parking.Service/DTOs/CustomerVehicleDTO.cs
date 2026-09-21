@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace Parking.Service.DTOs;
 
@@ -15,6 +16,9 @@ public class CustomerVehicleDTO
     [Range(1, int.MaxValue, ErrorMessage = "VehicleId must be greater than zero")]
     public int? VehicleId { get; set; }
 
+    [JsonIgnore]
     public CustomerDTO Customer { get; set; }
+
+    [JsonIgnore]
     public VehicleDTO Vehicle { get; set; }
 }
