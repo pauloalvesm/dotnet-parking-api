@@ -33,7 +33,8 @@ public class CustomerService : ICustomerService
     {
         var customer = _mapper.Map<Customer>(customerDto);
         var createdCustomer = await _customerRepository.AddAsync(customer);
-        return _mapper.Map<CustomerDTO>(createdCustomer);
+        var fullCustomer = await _customerRepository.GetByIdAsync(createdCustomer.Id);
+        return _mapper.Map<CustomerDTO>(fullCustomer);
     }
 
     public async Task<CustomerDTO> UpdateCustomer(CustomerDTO customerDto)

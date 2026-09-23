@@ -39,9 +39,9 @@ public class StaysController : ControllerBase
     }
 
     [HttpPut("{id:int}/complete")]
-    public async Task<ActionResult<StayDTO>> Complete(int id, [FromBody] DateTime exitDate)
+    public async Task<ActionResult<StayDTO>> Complete(int id, [FromBody] CompleteStayRequest request)
     {
-        var completedStay = await _stayService.CompleteStay(id, exitDate);
+        var completedStay = await _stayService.CompleteStay(id, request.ExitDate);
         return Ok(completedStay);
     }
 

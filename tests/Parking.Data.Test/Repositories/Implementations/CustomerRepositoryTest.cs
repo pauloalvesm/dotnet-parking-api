@@ -26,6 +26,7 @@ public class CustomerRepositoryTest
     {
         // Arrange
         using var context = GetInMemoryDbContext();
+        context.Addresses.AddRange(GetSampleAddresses());
         context.Customers.AddRange(GetSampleCustomers());
         await context.SaveChangesAsync();
 
@@ -70,6 +71,7 @@ public class CustomerRepositoryTest
     {
         // Arrange
         using var context = GetInMemoryDbContext();
+        context.Addresses.AddRange(GetSampleAddresses());
         context.Customers.AddRange(GetSampleCustomers());
         await context.SaveChangesAsync();
 
@@ -268,5 +270,12 @@ public class CustomerRepositoryTest
         new Customer(1, "John Doe", new DateOnly(1990, 1, 15), "11122233344", "5511911112222", "john.doe@email.com", 1),
         new Customer(2, "Jane Smith", new DateOnly(1985, 5, 20), "22233344455", "5511922223333", "jane.smith@email.com", 2),
         new Customer(3, "Bob Johnson", null, "33344455566", "5511933334444", "bob.johnson@email.com", 3)
+    };
+
+    private List<Address> GetSampleAddresses() => new()
+    {
+        new Address(1, "Main St", "100", "Apt 1", "Downtown", "SP", "City A", "12345-678"),
+        new Address(2, "Second St", "200", null, "Uptown", "RJ", "City B", "87654-321"),
+        new Address(3, "Third St", "300", "Suite 5", "Midtown", "MG", "City C", "11223-344")
     };
 }

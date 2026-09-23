@@ -150,25 +150,28 @@ public class StaysControllerTest
     {
         // Arrange
         const int stayId = 1;
-        var exitDate = new DateTime(2026, 1, 1, 12, 0, 0);
+        var request = new CompleteStayRequest
+        {
+            ExitDate = new DateTime(2026, 1, 1, 12, 0, 0)
+        };
         var completedStayDto = StayTestHelper.CreateValidStayDTO(stayId);
-        completedStayDto.ExitDate = exitDate;
+        completedStayDto.ExitDate = request.ExitDate;
         completedStayDto.TotalAmount = 20.00m;
 
         _stayServiceMock
-            .Setup(service => service.CompleteStay(stayId, exitDate))
+            .Setup(service => service.CompleteStay(stayId, request.ExitDate))
             .ReturnsAsync(completedStayDto);
 
         // Act
-        var result = await _controller.Complete(stayId, exitDate);
+        var result = await _controller.Complete(stayId, request);
 
         // Assert
         var okResult = Assert.IsType<OkObjectResult>(result.Result);
         var returnedStay = Assert.IsType<StayDTO>(okResult.Value);
         Assert.Equal(stayId, returnedStay.Id);
-        Assert.Equal(exitDate, returnedStay.ExitDate);
+        Assert.Equal(request.ExitDate, returnedStay.ExitDate);
 
-        _stayServiceMock.Verify(service => service.CompleteStay(stayId, exitDate), Times.Once);
+        _stayServiceMock.Verify(service => service.CompleteStay(stayId, request.ExitDate), Times.Once);
     }
 
     [Fact]
@@ -176,15 +179,18 @@ public class StaysControllerTest
     {
         // Arrange
         const int stayId = 999;
-        var exitDate = new DateTime(2026, 1, 1, 12, 0, 0);
+        var request = new CompleteStayRequest
+        {
+            ExitDate = new DateTime(2026, 1, 1, 12, 0, 0)
+        };
 
         _stayServiceMock
-            .Setup(service => service.CompleteStay(stayId, exitDate))
+            .Setup(service => service.CompleteStay(stayId, request.ExitDate))
             .ThrowsAsync(new KeyNotFoundException($"Stay with ID {stayId} not found."));
 
         // Act & Assert
-        await Assert.ThrowsAsync<KeyNotFoundException>(() => _controller.Complete(stayId, exitDate));
-        _stayServiceMock.Verify(service => service.CompleteStay(stayId, exitDate), Times.Once);
+        await Assert.ThrowsAsync<KeyNotFoundException>(() => _controller.Complete(stayId, request));
+        _stayServiceMock.Verify(service => service.CompleteStay(stayId, request.ExitDate), Times.Once);
     }
 
     [Fact]
@@ -192,15 +198,18 @@ public class StaysControllerTest
     {
         // Arrange
         const int stayId = 1;
-        var exitDate = new DateTime(2026, 1, 1, 12, 0, 0);
+        var request = new CompleteStayRequest
+        {
+            ExitDate = new DateTime(2026, 1, 1, 12, 0, 0)
+        };
 
         _stayServiceMock
-            .Setup(service => service.CompleteStay(stayId, exitDate))
+            .Setup(service => service.CompleteStay(stayId, request.ExitDate))
             .ThrowsAsync(new InvalidOperationException("Service error"));
 
         // Act & Assert
-        await Assert.ThrowsAsync<InvalidOperationException>(() => _controller.Complete(stayId, exitDate));
-        _stayServiceMock.Verify(service => service.CompleteStay(stayId, exitDate), Times.Once);
+        await Assert.ThrowsAsync<InvalidOperationException>(() => _controller.Complete(stayId, request));
+        _stayServiceMock.Verify(service => service.CompleteStay(stayId, request.ExitDate), Times.Once);
     }
 
     [Fact]
