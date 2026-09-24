@@ -9,6 +9,8 @@ using Parking.Domain.Interfaces.Repositories;
 using Parking.Service.Implementations;
 using Parking.Service.Interfaces;
 using Parking.Service.Services.Implementations;
+using Parking.Service.Services.Implementations.Account;
+using Parking.Service.Services.Interfaces.Account;
 using System.Reflection;
 
 namespace Parking.IoC.Configurations;
@@ -42,6 +44,7 @@ public static class DependencyInjection
         services.AddScoped<ICustomerVehicleService, CustomerVehicleService>();
         services.AddScoped<IStayService, StayService>();
         services.AddScoped<IPdfService, PdfService>();
+        services.AddScoped<ITokenService, TokenService>();
 
         return services;
     }
