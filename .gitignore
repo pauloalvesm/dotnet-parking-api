@@ -89,3 +89,8 @@ ehthumbs.db
 
 # Folder config file
 Desktop.ini
+
+# Environment variables & Docker credentials (Security)
+.env
+.env.*
+!.env.example

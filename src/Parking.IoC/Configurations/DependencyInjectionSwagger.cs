@@ -30,7 +30,7 @@ public static class DependencyInjectionSwagger
                 Scheme = JwtBearerDefaults.AuthenticationScheme,
                 BearerFormat = "JWT",
                 In = ParameterLocation.Header,
-                Description = "Informe o token JWT no formato: Bearer {seu_token}"
+                Description = "Inform the JWT token in the format: Bearer {your_token}"
             });
 
             options.AddSecurityRequirement(new OpenApiSecurityRequirement

@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:16
+    container_name: parking_postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    ports:
+      - "${HOST_PORT}:${DB_PORT}"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  parking.api:
+    image: ${DOCKER_REGISTRY-}parkingapi
+    container_name: parking_api
+    build:
+      context: .
+      dockerfile: src/Parking.API/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Server=${DB_HOST};Port=${DB_PORT};User Id=${POSTGRES_USER};Password=${POSTGRES_PASSWORD};Database=${POSTGRES_DB}
+      - Jwt__Key=${JWT_KEY}
+      - TokenConfiguration__Audience=${JWT_AUDIENCE}
+      - TokenConfiguration__Issuer=${JWT_ISSUER}
+      - TokenConfiguration__ExpireHours=${JWT_EXPIRE_HOURS}
+    ports:
+      - "8080:8080"
+      - "8081:8081"
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  pgdata:
