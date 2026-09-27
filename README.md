@@ -15,14 +15,37 @@ This project was developed using the following technologies:
 
 - **Backend:**  
   - `.NET 10`
-  - `Console Application`
+  - `ASP.NET Core WebAPI`
   - `C#`
+  - `Repository Pattern`
+  - `Service Pattern`
+  - `Microsoft Identity`
+  - `JWT`
+  - `Swagger`
+  - `XUnit`
+  - `Moq`
+  - `Docker`
+  - `Itext7`
 
 ## 💾 Clone the repository
 
 ```bash
 git clone https://github.com/pauloalvesm/dotnet-parking-api.git
 ```
+## ⬇️ How to Use
+
+### Using Visual Studio Code:
+
+- `Creating the Database`: after cloning the repository navigate to the `Parking.API` project using the terminal and, run the command `dotnet ef database update --context ApplicationDbContext` to restore the database with yours tables.
+- `Restoring the IdentityDbContext`: after cloning the repository navigate to the `Parking.API` project using the terminal and, run the command `dotnet ef database update --context IdentityApplicationDbContext` to restore the Identity tables.
+- `Using Docker`: navigate to the root folder of the project and run the `docker-compose up --build` command to create all the elements related to the Docker configuration.
+
+### Using Visual Studio:
+
+- `Creating the database`: after cloning the repository go to `Tools` and open the `Package Manager Console` selecting the `Parking.API` project and run the `Update-Database -Context ApplicationDbContext` command to restore the database with yours tables.
+- `Restore the IdentityDbContext`: navigate to the `Parking.API` project using the terminal, then run the command `Update-Database -Context IdentityApplicationDbContext` to restore the Identity tables.
+- `Using Docker`: the `Visual Studio` can restore the `Docker` settings automatically, if you prefer you can perform the process mentioned above. 
+
 ## 👤 Author
 
 **[Paulo Alves](https://github.com/pauloalvesm)**
