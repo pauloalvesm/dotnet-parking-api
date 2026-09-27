@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Parking.Service.DTOs;
 using Parking.Service.Interfaces;
 
 namespace Parking.Api.Controllers;
 
+[Authorize(AuthenticationSchemes = "Bearer")]
 [ApiController]
 [Route("api/[controller]")]
 public class StaysController : ControllerBase
@@ -53,6 +55,7 @@ public class StaysController : ControllerBase
     }
 
     [HttpDelete("{id:int}")]
+    [Authorize(Policy = "AdminAccess")]
     public async Task<IActionResult> Delete(int id)
     {
         await _stayService.DeleteStay(id);

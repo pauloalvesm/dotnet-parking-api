@@ -3,6 +3,7 @@ using Parking.IoC.Configurations;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddInfrastructure(builder.Configuration);
+builder.Services.AddInfrastructureJWT(builder.Configuration);
 builder.Services.AddInfrastructureSwagger();
 
 builder.Services.AddCors(options =>
@@ -16,24 +17,21 @@ builder.Services.AddCors(options =>
 });
 
 builder.Services.AddControllers();
-
-builder.Services.AddOpenApi();
+builder.Services.AddEndpointsApiExplorer();
 
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI(options =>
-    {
-        options.SwaggerEndpoint("/swagger/v1/swagger.json", "Parking API v1");
-    });
+    app.UseSwaggerUI();
 }
 
 app.UseCors("AllowAny");
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
